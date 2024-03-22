@@ -1,0 +1,5 @@
+This file is used to track progres
+
+1. Make a User interface for this weather app 
+2. User Friendly
+3. Learn to use APIs
