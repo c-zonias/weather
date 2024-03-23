@@ -1,17 +1,44 @@
+#new stuff learning about API's
+
+import tkinter as tk
 import requests
+import time
+ 
 
-api_key = '4749218e17bcc6dede4747840809cb5f'
+def getWeather(canvas):
+    city = textField.get()
+    
+    
+    json_data = requests.get(api).json()
+    condition = json_data['weather'][0]['main']
+    temp = int(json_data['main']['temp'] - 273.15)
+    min_temp = int(json_data['main']['temp_min'] - 273.15)
+    max_temp = int(json_data['main']['temp_max'] - 273.15)
+    pressure = json_data['main']['pressure']
+    humidity = json_data['main']['humidity']
+    wind = json_data['wind']['speed']
+    sunrise = time.strftime('%I:%M:%S', time.gmtime(json_data['sys']['sunrise'] - 21600))
+    sunset = time.strftime('%I:%M:%S', time.gmtime(json_data['sys']['sunset'] - 21600))
 
-input = ("Enter City: ")
+    final_info = condition + "\n" + str(temp) + "°C" 
+    final_data = "\n"+ "Min Temp: " + str(min_temp) + "°C" + "\n" + "Max Temp: " + str(max_temp) + "°C" +"\n" + "Pressure: " + str(pressure) + "\n" +"Humidity: " + str(humidity) + "\n" +"Wind Speed: " + str(wind) + "\n" + "Sunrise: " + sunrise + "\n" + "Sunset: " + sunset
+    label1.config(text = final_info)
+    label2.config(text = final_data)
 
-weather_data = requests.get(
-    f"https://api.openweathermap.org/data/2.5/weather?q={input}&units=imperial&APPID={api_key}")
 
-if weather_data.json()['cod'] == '404':
-    print("No City Found")
-else:
-    weather = weather_data.json()['weather'][0]['main']
-    temp = round(weather_data.json()['main']['temp'])
+canvas = tk.Tk()
+canvas.geometry("600x500")
+canvas.title("Weather App")
+f = ("poppins", 15, "bold")
+t = ("poppins", 35, "bold")
 
-    print(f"The weather in {input} is: {weather}")
-    print(f"The temperature in {input} is: {temp}ºF")
+textField = tk.Entry(canvas, justify='center', width = 20, font = t)
+textField.pack(pady = 20)
+textField.focus()
+textField.bind('<Return>', getWeather)
+
+label1 = tk.Label(canvas, font=t)
+label1.pack()
+label2 = tk.Label(canvas, font=f)
+label2.pack()
+canvas.mainloop()
